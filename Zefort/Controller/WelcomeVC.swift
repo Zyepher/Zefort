@@ -11,12 +11,13 @@ import Firebase
 
 class WelcomeVC: UIViewController {
     
+    @IBOutlet weak var UINavigationItem: UINavigationItem!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
-        self.navigationController?.setNavigationBarHidden(true, animated: animated)
         super.viewWillAppear(animated)
     }
     
@@ -24,7 +25,6 @@ class WelcomeVC: UIViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
         super.viewWillDisappear(animated)
     }
-    
     
     @IBAction func signInPressed(_ sender: Any) {
         performSegue(withIdentifier: "goToSignInVC", sender: self)
@@ -37,9 +37,5 @@ class WelcomeVC: UIViewController {
     }
     
     @IBAction func unwindToWelcomeVC(for unwindSegue: UIStoryboardSegue) { }
-    
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
     
 }

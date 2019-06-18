@@ -8,17 +8,16 @@
 
 import Foundation
 import UIKit
+import Firebase
 
 extension UIViewController {
     
-    func showAlert(title: String, message: String, handlerOK:((UIAlertAction) -> Void)?, handlerCancel: ((UIAlertAction) -> Void)?) {
+    func credentialShowAlert(title: String, message: String, handlerOK:((UIAlertAction) -> Void)?) {
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: handlerOK)
-        let actionCancel = UIAlertAction(title: "Cancel", style: .cancel, handler: handlerCancel)
         
         alert.addAction(action)
-        alert.addAction(actionCancel)
         
         DispatchQueue.main.async {
             self.present(alert, animated: true, completion: nil)

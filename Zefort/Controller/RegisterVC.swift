@@ -9,29 +9,16 @@
 import UIKit
 import Firebase
 
-extension UIViewController {
-    
-    func hideKeyboardWhenTappedAround() {
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
-        tap.cancelsTouchesInView = false
-        view.addGestureRecognizer(tap)
-    }
-    
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
-    }
-}
-
 extension RegisterVC: UITextFieldDelegate {
-    
+
     func textFieldDidEndEditing(_ textField : UITextField) {
-        
+
         //Check if the email's format is correct
-        checkEmailFormat(enteredEmail: emailAddressTextField.text!)
-        
+        checkEmailFormat(enteredEmail: emailTextField.text!)
+
         //Check if the password's format is correct
         checkPasswordFormat(enteredPassword: passwordTextField.text!)
-        
+
         //Check if both email and password is correct
         if (isCorrectEmail && isCorrectPassword) {
             createAccountButton(isEnabled: true)
@@ -42,10 +29,10 @@ extension RegisterVC: UITextFieldDelegate {
 }
 
 class RegisterVC: UIViewController {
-    @IBOutlet weak var emailAddressTextField: UITextField!
+    @IBOutlet weak var emailTextField: UITextField!
+    @IBOutlet weak var securePasswordEntryButton: UIButton!
     @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var signUpButton: UIButton!
-    @IBOutlet weak var securePasswordEntry: UIButton!
+    @IBOutlet weak var nextButton: UIButton!
     
     var isCorrectEmail: Bool = false
     var isCorrectPassword: Bool = false
@@ -53,13 +40,15 @@ class RegisterVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        nextButton.bindToKeyboard()
+        hideKeyboardWhenTappedAround()
         
         createAccountButton(isEnabled: false)
-        emailAddressTextField.delegate = self
+        emailTextField.delegate = self
         passwordTextField.delegate = self
-        self.hideKeyboardWhenTappedAround()
         
-        signUpButton.layer.cornerRadius = 20
+        nextButton.layer.cornerRadius = 20
+        
     }
     
     func validateEmail(enteredEmail: String) -> Bool {
@@ -72,12 +61,12 @@ class RegisterVC: UIViewController {
         print("\nSTATUS:")
         
         //Firstly, check if email textfield is empty
-        if (emailAddressTextField.text!.isEmpty) {
+        if (emailTextField.text!.isEmpty) {
             isCorrectEmail = false
             createAccountButton(isEnabled: false)
         } else {
             //If not empty, check if the email's format is correct
-            if (validateEmail(enteredEmail: emailAddressTextField.text!)) {
+            if (validateEmail(enteredEmail: emailTextField.text!)) {
                 isCorrectEmail = true
             } else {
                 isCorrectEmail = false
@@ -100,65 +89,38 @@ class RegisterVC: UIViewController {
     
     func createAccountButton(isEnabled: Bool) {
         if (isEnabled) {
-            signUpButton.isEnabled = true
-            signUpButton.backgroundColor = #colorLiteral(red: 0, green: 0.5882352941, blue: 1, alpha: 1)
+            nextButton.isEnabled = true
+            nextButton.alpha = 1.0
         } else {
-            signUpButton.backgroundColor = #colorLiteral(red: 0, green: 0.5882352941, blue: 1, alpha: 1)
-            signUpButton.isEnabled = false
+            nextButton.isEnabled = false
+            nextButton.alpha = 0.6
         }
     }
     
-    @IBAction func registerPressed(_ sender: Any) {
-        
-        //TODO: Create the user
-        Auth.auth().createUser(withEmail: emailAddressTextField.text!, password: passwordTextField.text!) { (user, error) in
-            if error != nil {
-                print(error!)
+    
+    @IBAction func nextTapped(_ sender: Any) {
+        AuthService.instance.registerUser(withEmail: self.emailTextField.text!, andPassword: self.passwordTextField.text!) { (success, error) in
+            if (success) {
+                AuthService.instance.signinUser(withEmail: self.emailTextField.text!, andPassword: self.passwordTextField.text!, signinComplete: { (success, nil) in
+                    UserDefaults.standard.set(true, forKey: "status")
+                    Switcher.updateRootVC()
+                })
             } else {
-                print("Registration successful!")
-                //TODO: Send the user info to Firebase and save it in our database
-                let usersDB = Database.database().reference().child("Users")
-                
-                let userInfo = ["Email": self.emailAddressTextField.text!, "Password": self.passwordTextField.text!]
-                
-                usersDB.childByAutoId().setValue(userInfo) {
-                    (error, reference) in
-                    if error != nil {
-                        print(error!)
-                    } else {
-                        print("User info saved successfully!")
-                    }
-                }
-                
-                //TODO: Sign in the user
-                Auth.auth().signIn(withEmail: self.emailAddressTextField.text!, password: self.passwordTextField.text!) { (user, error) in
-                    if error != nil {
-                        print(error!)
-                    } else {
-                        print("Log in successful!")
-                        UserDefaults.standard.set(true, forKey: "status")
-                        Switcher.updateRootVC()
-                    }
-                }
+                self.credentialShowAlert(title: "", message: "The email address is already in use by another account.", handlerOK: { (action) in })
             }
         }
     }
     
-    
-    @IBAction func securePasswordEntryButtonPressed(_ sender: Any) {
+    @IBAction func securePasswordEntryTapped(_ sender: Any) {
         if (isSecurePasswordEntry == true) {
             isSecurePasswordEntry = false
             passwordTextField.isSecureTextEntry = false
-            securePasswordEntry.setTitle("Hide password", for: .normal)
+            securePasswordEntryButton.setTitle("Hide password", for: .normal)
         } else {
             isSecurePasswordEntry = true
             passwordTextField.isSecureTextEntry = true
-            securePasswordEntry.setTitle("Reveal password", for: .normal)
+            securePasswordEntryButton.setTitle("Reveal password", for: .normal)
         }
-    }
-    
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
     }
     
 }

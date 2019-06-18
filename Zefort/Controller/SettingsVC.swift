@@ -17,21 +17,27 @@ class SettingsVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if (indexPath.section == 4 && indexPath.row == 0) {
-            do {
-                try Auth.auth().signOut()
-                
-                UserDefaults.standard.set(false, forKey: "status")
-                Switcher.updateRootVC()
+        if (indexPath.section == 3 && indexPath.row == 0) {
+            let signOutPopOut = UIAlertController(title: "", message: "Are you sure you want to log out?", preferredStyle: .actionSheet)
+            let signOutAction = UIAlertAction(title: "Log Out", style: .destructive) { (buttonTapped) in
+                do {
+                    try Auth.auth().signOut()
+                    UserDefaults.standard.set(false, forKey: "status")
+                    Switcher.updateRootVC()
+                } catch {
+                    print(error)
+                }
             }
-            catch {
-                print("error: there was a problem signing out")
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .default) { (buttonTapped) in
+                self.tableView.deselectRow(at: indexPath, animated: true)
             }
+            
+            signOutPopOut.addAction(signOutAction)
+            signOutPopOut.addAction(cancelAction)
+            present(signOutPopOut, animated: true, completion: nil)
         }
-    }
-    
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
+        
     }
     
 }
