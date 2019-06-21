@@ -14,7 +14,7 @@ class CreateQuestionVC: UIViewController {
     @IBOutlet weak var sendButton: UIBarButtonItem!
     @IBOutlet weak var descriptionTextView: UITextView!
     @IBOutlet weak var emailSearchTextField: UnderLineTextField!
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var tutorTableView: UITableView!
     @IBOutlet weak var selectedTutor: UILabel!
     
     var emailArray = [String]()
@@ -22,13 +22,13 @@ class CreateQuestionVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.delegate = self
-        tableView.dataSource = self
+        tutorTableView.delegate = self
+        tutorTableView.dataSource = self
         getEmailsForEmptySearchQuery()
         emailSearchTextField.delegate = self
         emailSearchTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
-    
+        
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         descriptionTextView.becomeFirstResponder()
@@ -42,7 +42,7 @@ class CreateQuestionVC: UIViewController {
     func getEmailsForEmptySearchQuery() {
         DataService.instance.getEmails(forEmptySearchQuery: emailSearchTextField.text!) { (returnedEmailArray) in
             self.emailArray = returnedEmailArray
-            self.tableView.reloadData()
+            self.tutorTableView.reloadData()
         }
     }
     
@@ -52,7 +52,7 @@ class CreateQuestionVC: UIViewController {
         } else {
             DataService.instance.getEmails(forFilledSearchQuery: emailSearchTextField.text!) { (returnedEmailArray) in
                 self.emailArray = returnedEmailArray
-                self.tableView.reloadData()
+                self.tutorTableView.reloadData()
             }
         }
     }
@@ -67,14 +67,17 @@ class CreateQuestionVC: UIViewController {
                         self.navigationController?.popToRootViewController(animated: true)
                     } else {
                         print("Question could not be created, please try again..")
+                        self.showAlert(title: "Please try again..", message: "Question could not be created. Please double-check and try again.", handlerOK: nil)
                     }
                 })
             }
         }
     }
+    
 }
 
 extension CreateQuestionVC: UITableViewDelegate, UITableViewDataSource {
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -104,6 +107,7 @@ extension CreateQuestionVC: UITableViewDelegate, UITableViewDataSource {
         sendButton.isEnabled = true
         tableView.reloadData()
     }
+    
 }
 
 extension CreateQuestionVC: UITextFieldDelegate {

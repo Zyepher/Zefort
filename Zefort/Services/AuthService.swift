@@ -18,10 +18,9 @@ class AuthService {
                 userCreationComplete(false, error)
                 return
             }
+    
+            DataService.instance.createDBUser(uid: user.user.uid, userEmail: user.user.email!, userName: "Zyepher", userAbout: "I love coding!", userJoinedDate: "Member since January 2019", userIsTutor: false, userIsExcellentTutor: false, userIsVerified: false, provider: user.user.providerID)
             
-            let userData = ["provider": user.user.providerID, "email": user.user.email]
-            let userStatus = ["isExcellentTutor": false, "isVerified": false]
-            DataService.instance.createDBUser(uid: user.user.uid, userData: userData as Dictionary<String, Any>, userStatus: userStatus as Dictionary<String, Any>)
             userCreationComplete(true, nil)
         }
     }

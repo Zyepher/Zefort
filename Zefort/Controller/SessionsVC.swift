@@ -50,7 +50,6 @@ class SessionsVC: UIViewController {
 }
 
 extension SessionsVC: UITableViewDelegate, UITableViewDataSource {
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -67,14 +66,8 @@ extension SessionsVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "goToMessageVC", sender: self)
+        guard let messagesVC = storyboard?.instantiateViewController(withIdentifier: "MessagesVC") as? MessagesVC else { return }
+        messagesVC.initData(forQuestion: questionsArray[indexPath.row])
+        present(messagesVC, animated: true, completion: nil)
     }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destination = segue.destination as? MessagesVC {
-            destination.question = questionsArray[(questionsTableView.indexPathForSelectedRow?.row)!]
-            questionsTableView.deselectRow(at: questionsTableView.indexPathForSelectedRow!, animated: true)
-        }
-    }
-    
 }

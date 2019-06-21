@@ -12,7 +12,7 @@ import Firebase
 
 extension UIViewController {
     
-    func credentialShowAlert(title: String, message: String, handlerOK:((UIAlertAction) -> Void)?) {
+    func showAlert(title: String, message: String, handlerOK:((UIAlertAction) -> Void)?) {
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: handlerOK)

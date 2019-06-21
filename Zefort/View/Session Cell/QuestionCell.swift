@@ -21,8 +21,10 @@ class QuestionCell: UITableViewCell {
         self.descriptionLabel.text = description
         if (status) {
             self.statusLabel.text = "Completed"
+            self.statusLabel.textColor = #colorLiteral(red: 0, green: 0.7215686275, blue: 0.5803921569, alpha: 1)
         } else {
             self.statusLabel.text = "On-going"
+            self.statusLabel.textColor = #colorLiteral(red: 0, green: 0.5882352941, blue: 1, alpha: 1)
         }
     }
 }

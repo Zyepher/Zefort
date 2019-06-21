@@ -11,14 +11,13 @@ import Firebase
 
 class WelcomeVC: UIViewController {
     
-    @IBOutlet weak var UINavigationItem: UINavigationItem!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0, green: 0.5882352941, blue: 1, alpha: 1)]
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -26,14 +25,12 @@ class WelcomeVC: UIViewController {
         super.viewWillDisappear(animated)
     }
     
-    @IBAction func signInPressed(_ sender: Any) {
+    @IBAction func signInTapped(_ sender: Any) {
         performSegue(withIdentifier: "goToSignInVC", sender: self)
     }
     
-    @IBAction func registerPressed(_ sender: Any) {
-        
+    @IBAction func signUpTapped(_ sender: Any) {
         performSegue(withIdentifier: "goToRegisterVC", sender: self)
-        
     }
     
     @IBAction func unwindToWelcomeVC(for unwindSegue: UIStoryboardSegue) { }

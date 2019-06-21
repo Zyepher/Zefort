@@ -16,7 +16,6 @@ class SettingsVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         if (indexPath.section == 3 && indexPath.row == 0) {
             let signOutPopOut = UIAlertController(title: "", message: "Are you sure you want to log out?", preferredStyle: .actionSheet)
             let signOutAction = UIAlertAction(title: "Log Out", style: .destructive) { (buttonTapped) in
@@ -37,7 +36,6 @@ class SettingsVC: UITableViewController {
             signOutPopOut.addAction(cancelAction)
             present(signOutPopOut, animated: true, completion: nil)
         }
-        
     }
     
 }

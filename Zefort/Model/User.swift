@@ -1,8 +1,8 @@
 //
 //  User.swift
-//  XAROUND
+//  Zefort
 //
-//  Created by NIK FIKRI on 05/02/2019.
+//  Created by NIK FIKRI on 21/06/2019.
 //  Copyright © 2019 Zyepher. All rights reserved.
 //
 
@@ -10,81 +10,58 @@ import Foundation
 
 class User {
     
-    var userID : Int = 0
-    var username : String = "" //for your friend to add you. Adding will allow your friend to tag you in a comment section and to message you privately
-    var userTagID : String = "" //when your friend tagged you in a comment and publish the comment, we will reveal your tagID instead of your username to protect your privacy
-    var userPassword : String = ""
-    var userAboutMe : String = ""
-    var userEmailAddress : String = ""
-    var userPhoneNumber : String = ""
-    var userIsVerified : Bool = false
+    private var _email: String
+    private var _name: String
+    private var _about: String
+    private var _joinedDate: String
     
-    init() {
-        
+    private var _isTutor: Bool
+    private var _isExcellentTutor: Bool
+    private var _isVerified: Bool
+    
+    private var _provider: String
+    
+    var email: String {
+        return _email
     }
     
-    convenience init (userChosenUserName : String) {
-        self.init()
-        username = userChosenUserName
+    var name: String {
+        return _name
     }
     
-    // START USER SETTERS
-    
-    func setUserID(newUserID : Int) {
-        userID = newUserID
+    var about: String {
+        return _about
     }
     
-    func setUsername(newUsername : String) {
-        username = newUsername
+    var joinedDate : String {
+        return _joinedDate
     }
     
-    func setUserPassword(newUserPassword : String) {
-        userPassword = newUserPassword
+    var isTutor: Bool {
+        return _isTutor
     }
     
-    func setUserAboutMe(newUserAboutMe : String) {
-        userAboutMe = newUserAboutMe
+    var isExcellentTutor: Bool {
+        return _isExcellentTutor
     }
     
-    func setUserEmailAddress(newUserEmailAddress : String) {
-        userEmailAddress = newUserEmailAddress
+    var isVerified: Bool {
+        return _isVerified
     }
     
-    func setUserPhoneNumber(newUserPhoneNumber : String) {
-        userPhoneNumber = newUserPhoneNumber
+    var provider: String {
+        return _provider
     }
     
-    func setUserIsVerified(newUserVerificationStatus : Bool) {
-        userIsVerified = newUserVerificationStatus
+    init(email: String, name: String, about: String, joinedDate: String, isTutor: Bool, isExcellentTutor: Bool, isVerified: Bool, provider: String) {
+        self._email = email
+        self._name = name
+        self._about = about
+        self._joinedDate = joinedDate
+        self._isTutor = isTutor
+        self._isExcellentTutor = isExcellentTutor
+        self._isVerified = isVerified
+        self._provider = provider
     }
     
-    // END USER SETTERS
-    
-    // BEGIN USER GETTERS
-    
-    func getUserID() {
-        print(userID)
-    }
-    
-    func getUserName() {
-        print(username)
-    }
-    
-    func getUserPassword() {
-        print(userPassword)
-    }
-    
-    func getUserAboutMe() {
-        print(userAboutMe)
-    }
-    
-    func getUserPhoneNumber() {
-        print(userPhoneNumber)
-    }
-    
-    func getUserIsVerified() {
-        print(userIsVerified)
-    }
-    
-    // END USER GETTERS
 }
